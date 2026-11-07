@@ -67,6 +67,33 @@ def estado_no_tempo(df, minuto):
     linha = df.loc[indice]
     return {coluna: float(linha[coluna]) for coluna in df.columns}
 
+# Qual sensor NTC mede cada célula (a célula 3 não tem sensor)
+SENSOR_DA_CELULA = {
+    "v_celula1": "temp_ntc1_c",
+    "v_celula2": "temp_ntc2_c",
+    "v_celula3": None,
+}
+
+
+def avaliar_celulas(df):
+    resumo = resumo_celulas(df)
+    alertas = verificar_alertas(df)
+    maior_final = max(resumo[coluna]["final_v"] for coluna in COLUNAS_CELULAS)
+    maior_media = max(resumo[coluna]["media_v"] for coluna in COLUNAS_CELULAS)
+
+    celulas = {}
+    for coluna in COLUNAS_CELULAS:
+        sensor = SENSOR_DA_CELULA[coluna]
+        celulas[coluna] = {
+            "final_v": resumo[coluna]["final_v"],
+            "media_v": resumo[coluna]["media_v"],
+            "abaixo_da_melhor_v": round(maior_final - resumo[coluna]["final_v"], 3),
+            "temp_maxima_c": resumo[f"{sensor}_maxima"] if sensor else "sem sensor",
+            "media_abaixo_da_melhor_v": round(maior_media - resumo[coluna]["media_v"], 3),
+        }
+
+    return {"celulas": celulas, "alertas": alertas["alertas"]}
+
 
 if __name__ == "__main__":
     import json
