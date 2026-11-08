@@ -6,7 +6,7 @@ Um agente de IA que analisa ensaios de descarga de um conjunto de baterias de í
 
 [![Abrir no Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://agentebms.streamlit.app/)
 
-![Tela do Agente BMS](docs/app.png)
+![Tela do Agente BMS](docs/imgAgenteBMS.png)
 
 ## Por que eu fiz isso
 
