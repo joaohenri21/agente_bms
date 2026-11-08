@@ -24,7 +24,6 @@ INSTRUCOES = (
     "Responda em português, de forma curta e simples, citando os números com unidade. "
     "Quando a pergunta for sobre o estado ou o desgaste de uma célula, "
     "consulte o resumo e os alertas, e considere tensão, temperatura e desbalanceamento. "
-    "Sempre que possivel, e se for necessario, use mais de uma ferramenta para responder a pergunta. "
     "Use o termo tensão, e não voltagem. "
 )
 
