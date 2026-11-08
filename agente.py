@@ -9,7 +9,11 @@ from dados import carregar_dados
 from ferramentas import resumo_celulas, verificar_alertas, estado_no_tempo, avaliar_celulas
 
 load_dotenv()
-cliente = Groq(api_key=os.getenv("GROQ_API_KEY"))
+chave = os.getenv("GROQ_API_KEY")  # no seu computador: vem do .env
+if not chave:
+    import streamlit as st
+    chave = st.secrets["GROQ_API_KEY"]  # no servidor: vem dos segredos do Streamlit
+cliente = Groq(api_key=chave)
 df = carregar_dados()
 
 INSTRUCOES = (
