@@ -22,7 +22,7 @@ CELULAS = [
 CAPACIDADE_TERMICA_J_POR_C = 45.0    # J/°C (célula de ~45 g)
 RESISTENCIA_TERMICA_C_POR_W = 20.0   # °C/W
 
-MODELO = "openai/gpt-oss-20b"
+MODELO = "openai/gpt-oss-120b"
 
 # Diferença máxima aceitável entre a célula mais carregada e a menos carregada
 LIMITE_DESBALANCEAMENTO_V = 0.10
