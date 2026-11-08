@@ -24,6 +24,7 @@ INSTRUCOES = (
     "Responda em português, de forma curta e simples, citando os números com unidade. "
     "Quando a pergunta for sobre o estado ou o desgaste de uma célula, "
     "consulte o resumo e os alertas, e considere tensão, temperatura e desbalanceamento. "
+    "Use vírgula como separador decimal (exemplo: 2,91 V). "
     "Use o termo tensão, e não voltagem. "
 )
 

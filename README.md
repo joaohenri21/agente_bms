@@ -60,7 +60,7 @@ O CSV tem as mesmas colunas da interface do protótipo. Trocar dado simulado por
 
 ## O que eu aprendi
 
-**Sem ferramentas, o LLM inventa com confiança.** Antes de criar as ferramentas, perguntei "qual era a tensão da célula 2 no final do ensaio?". O modelo nunca tinha visto os dados e respondeu **2,70 V**, sem avisar que estava chutando. O valor real é **2,91 V**. Com as ferramentas ele acerta, porque o número vem do Python.
+**Sem ferramentas, o LLM inventa muitas coisas.** Antes de criar as ferramentas, perguntei "qual era a tensão da célula 2 no final do ensaio?". O modelo nunca tinha visto os dados e respondeu **2,70 V**, sem avisar que estava chutando. O valor real é **2,91 V**. Com as ferramentas ele acerta, porque o número vem do Python.
 
 **O que precisa acontecer sempre vai no código, não no prompt.** Tentei fazer o agente considerar temperatura e alertas ao avaliar o desgaste só escrevendo isso nas instruções. Ele ignorou em todas as tentativas. A solução foi criar a `avaliar_celulas`, que já entrega todas as evidências juntas. A mesma coisa aconteceu quando ele afirmou que a célula 2 tinha "atingido o limite de descarga", sendo que 2,91 V é maior que o corte de 2,75 V. Em vez de pedir no prompt, o resultado da ferramenta agora traz `atingiu_tensao_corte: false` escrito.
 
@@ -125,7 +125,7 @@ python simulador.py      # gera um novo ensaio simulado
 
 ## Feito com
 
-Python · pandas · NumPy · Groq (`gpt-oss-20b`) · Streamlit · Altair
+Python · pandas · NumPy · Groq (`gpt-oss-120b`) · Streamlit · Altair
 
 ## Autor
 
