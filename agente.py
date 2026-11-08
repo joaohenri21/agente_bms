@@ -21,6 +21,7 @@ INSTRUCOES = (
     "Quando a pergunta for sobre o estado ou o desgaste de uma célula, "
     "consulte o resumo e os alertas, e considere tensão, temperatura e desbalanceamento. "
     "Sempre que possivel, e se for necessario, use mais de uma ferramenta para responder a pergunta. "
+    "Use o termo tensão, e não voltagem. "
 )
 
 # Descrição das ferramentas para o LLM: nome, para que serve e quais parâmetros recebe
@@ -99,11 +100,11 @@ def executar_ferramenta(nome, argumentos):
     return {"erro": f"Ferramenta desconhecida: {nome}"}
 
 
-def perguntar(pergunta, max_rodadas=5):
-    mensagens = [
-        {"role": "system", "content": INSTRUCOES},
-        {"role": "user", "content": pergunta},
-    ]
+def perguntar(pergunta, historico=None, max_rodadas=5):
+    mensagens = [{"role": "system", "content": INSTRUCOES}]
+    mensagens += historico or []  # conversa anterior (só os textos)
+    mensagens.append({"role": "user", "content": pergunta})
+    usadas = []  # ferramentas chamadas nesta pergunta, para mostrar na tela
 
     for _ in range(max_rodadas):
         resposta = cliente.chat.completions.create(
@@ -116,7 +117,7 @@ def perguntar(pergunta, max_rodadas=5):
 
         # Sem pedido de ferramenta: o LLM já tem tudo e respondeu
         if not mensagem.tool_calls:
-            return mensagem.content
+            return {"resposta": mensagem.content, "ferramentas": usadas}
 
         # Guarda no histórico o pedido que o LLM fez
         mensagens.append({
@@ -143,14 +144,21 @@ def perguntar(pergunta, max_rodadas=5):
                 argumentos = {}
             print(f"  [ferramenta] {chamada.function.name}({argumentos})")
             resultado = executar_ferramenta(chamada.function.name, argumentos)
+            usadas.append({
+                "nome": chamada.function.name,
+                "argumentos": argumentos,
+                "resultado": resultado,
+            })
             mensagens.append({
                 "role": "tool",
                 "tool_call_id": chamada.id,
                 "content": json.dumps(resultado, ensure_ascii=False),
             })
 
-    return "Não consegui chegar a uma resposta. Tente perguntar de outro jeito."
-
+    return {
+        "resposta": "Não consegui chegar a uma resposta. Tente perguntar de outro jeito.",
+        "ferramentas": usadas,
+    }
 
 if __name__ == "__main__":
     print("Agente BMS. Digite sua pergunta (ou 'sair do programa').")
@@ -159,4 +167,4 @@ if __name__ == "__main__":
         if pergunta.lower() == "sair do programa":
             break
         if pergunta:
-            print("\nAgente:", perguntar(pergunta))
+            print("\nAgente:", perguntar(pergunta) ["resposta"])

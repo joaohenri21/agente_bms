@@ -87,6 +87,7 @@ def avaliar_celulas(df):
         celulas[coluna] = {
             "final_v": resumo[coluna]["final_v"],
             "media_v": resumo[coluna]["media_v"],
+            "atingiu_tensao_corte": resumo[coluna]["minima_v"] <= TENSAO_CORTE_V,
             "abaixo_da_melhor_v": round(maior_final - resumo[coluna]["final_v"], 3),
             "temp_maxima_c": resumo[f"{sensor}_maxima"] if sensor else "sem sensor",
             "media_abaixo_da_melhor_v": round(maior_media - resumo[coluna]["media_v"], 3),
