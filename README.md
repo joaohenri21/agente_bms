@@ -9,7 +9,7 @@ Agente de IA que analisa dados de um conjunto de baterias de lítio (3S1P) usand
 - [x] Simulador de descarga do conjunto 3S1P
 - [x] Integração com LLM
 - [x] Ferramentas de análise (resumo, alertas, gráficos)
-- [ ] Interface de chat (Streamlit)
+- [x] Interface de chat (Streamlit)
 - [ ] Publicação online
 
 ## Contexto

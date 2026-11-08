@@ -1,4 +1,5 @@
 import streamlit as st
+import altair as alt
 
 from agente import perguntar
 from dados import carregar_dados
@@ -12,11 +13,15 @@ st.caption(
 
 
 @st.cache_data
-def tensoes_por_minuto():
-    df = carregar_dados()
-    df["tempo_min"] = df["tempo_s"] / 60
-    return df.set_index("tempo_min")[["v_celula1", "v_celula2", "v_celula3"]]
-
+def tensoes_para_grafico():
+    df = carregar_dados().iloc[::10]  # 1 leitura a cada 10 s já basta para o gráfico
+    df = df.assign(tempo_min=df["tempo_s"] / 60)
+    return df.melt(
+        id_vars="tempo_min",
+        value_vars=["v_celula1", "v_celula2", "v_celula3"],
+        var_name="celula",
+        value_name="tensao_v",
+    )
 
 def mostrar_ferramentas(ferramentas):
     if not ferramentas:
@@ -28,8 +33,13 @@ def mostrar_ferramentas(ferramentas):
 
 
 with st.expander("Tensão das células durante o ensaio", expanded=True):
-    st.line_chart(tensoes_por_minuto(), x_label="Tempo (min)", y_label="Tensão (V)")
-
+    grafico = alt.Chart(tensoes_para_grafico()).mark_line().encode(
+        x=alt.X("tempo_min:Q", title="Tempo (min)"),
+        y=alt.Y("tensao_v:Q", title="Tensão (V)", scale=alt.Scale(domain=[2.8, 4.3])),
+        color=alt.Color("celula:N", title="Célula"),
+    )
+    st.altair_chart(grafico)
+    
 # A conversa fica guardada na sessão para não sumir quando a página atualiza
 if "mensagens" not in st.session_state:
     st.session_state.mensagens = []
