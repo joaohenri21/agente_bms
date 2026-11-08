@@ -14,7 +14,7 @@ st.caption(
 
 @st.cache_data
 def tensoes_para_grafico():
-    df = carregar_dados().iloc[::10]  # 1 leitura a cada 10 s já basta para o gráfico
+    df = carregar_dados().iloc[::10]  # 1 leitura a cada 10 s
     df = df.assign(tempo_min=df["tempo_s"] / 60)
     return df.melt(
         id_vars="tempo_min",

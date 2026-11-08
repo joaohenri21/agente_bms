@@ -21,7 +21,7 @@ def resumo_celulas(df):
 def verificar_alertas(df):
     alertas = []
 
-    # Desbalanceamento: diferença entre a célula mais alta e a mais baixa, em cada leitura
+    # Desbalanceamento
     diferenca = df[COLUNAS_CELULAS].max(axis=1) - df[COLUNAS_CELULAS].min(axis=1)
     acima = df[diferenca > LIMITE_DESBALANCEAMENTO_V]
     if not acima.empty:
@@ -31,7 +31,7 @@ def verificar_alertas(df):
             "maior_diferenca_v": round(float(diferenca.max()), 3),
         })
 
-    # Subtensão: alguma célula chegou na tensão de corte?
+    # Subtensão
     for coluna in COLUNAS_CELULAS:
         abaixo = df[df[coluna] <= TENSAO_CORTE_V]
         if not abaixo.empty:
@@ -67,7 +67,7 @@ def estado_no_tempo(df, minuto):
     linha = df.loc[indice]
     return {coluna: float(linha[coluna]) for coluna in df.columns}
 
-# Qual sensor NTC mede cada célula (a célula 3 não tem sensor)
+# Qual sensor NTC mede cada célula
 SENSOR_DA_CELULA = {
     "v_celula1": "temp_ntc1_c",
     "v_celula2": "temp_ntc2_c",

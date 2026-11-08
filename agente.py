@@ -9,10 +9,10 @@ from dados import carregar_dados
 from ferramentas import resumo_celulas, verificar_alertas, estado_no_tempo, avaliar_celulas
 
 load_dotenv()
-chave = os.getenv("GROQ_API_KEY")  # no seu computador: vem do .env
+chave = os.getenv("GROQ_API_KEY")
 if not chave:
     import streamlit as st
-    chave = st.secrets["GROQ_API_KEY"]  # no servidor: vem dos segredos do Streamlit
+    chave = st.secrets["GROQ_API_KEY"]
 cliente = Groq(api_key=chave)
 df = carregar_dados()
 
@@ -28,7 +28,6 @@ INSTRUCOES = (
     "Use o termo tensão, e não voltagem. "
 )
 
-# Descrição das ferramentas para o LLM: nome, para que serve e quais parâmetros recebe
 FERRAMENTAS = [
     {
         "type": "function",
@@ -106,9 +105,9 @@ def executar_ferramenta(nome, argumentos):
 
 def perguntar(pergunta, historico=None, max_rodadas=5):
     mensagens = [{"role": "system", "content": INSTRUCOES}]
-    mensagens += historico or []  # conversa anterior (só os textos)
+    mensagens += historico or []
     mensagens.append({"role": "user", "content": pergunta})
-    usadas = []  # ferramentas chamadas nesta pergunta, para mostrar na tela
+    usadas = []
 
     for _ in range(max_rodadas):
         resposta = cliente.chat.completions.create(

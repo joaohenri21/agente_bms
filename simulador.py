@@ -7,7 +7,6 @@ from config import (
 )
 
 # Curva OCV x SoC aproximada, típica de célula de lítio.
-# Depois, na IC, você troca esses pontos pelos medidos nos ensaios reais.
 SOC_PONTOS = [0.00, 0.05, 0.10, 0.20, 0.40, 0.60, 0.80, 0.90, 1.00]
 OCV_PONTOS = [3.00, 3.30, 3.45, 3.55, 3.65, 3.80, 3.95, 4.05, 4.20]
 
@@ -32,8 +31,7 @@ def atualizar_temperatura(temp_c, corrente_a, resistencia_ohm, dt_s):
 
 
 def simular_descarga(corrente_a=1.3, semente=42):
-    # "semente" faz o ruído aleatório sair sempre igual,
-    # assim você consegue repetir o experimento e comparar resultados
+    # "semente" faz o ruído aleatório sair sempre igual
     rng = np.random.default_rng(semente)
 
     n = len(CELULAS)
@@ -52,7 +50,7 @@ def simular_descarga(corrente_a=1.3, semente=42):
         if min(tensoes) <= TENSAO_CORTE_V or min(socs) <= 0:
             break
 
-        # Leitura dos sensores com um pouco de ruído, como no ADS1115 e nos NTCs
+        # Leitura dos sensores com um pouco de ruído, no ADS1115 e nos NTCs
         v_lidas = [v + rng.normal(0, 0.003) for v in tensoes]
 
         linhas.append({
@@ -75,7 +73,7 @@ def simular_descarga(corrente_a=1.3, semente=42):
     return pd.DataFrame(linhas)
 
 
-# Teste rápido: só roda quando você executa este arquivo diretamente
+# Teste rápido
 if __name__ == "__main__":
     df = simular_descarga()
     df.to_csv("dados_simulados.csv", index=False)
